@@ -29,6 +29,7 @@ import { Route as AuthenticatedPlansDailyRouteImport } from './routes/_authentic
 import { Route as AuthenticatedPlansCreditsRouteImport } from './routes/_authenticated/plans.credits'
 import { Route as AuthenticatedOrdersIdRouteImport } from './routes/_authenticated/orders.$id'
 import { Route as AuthenticatedAdminUsersRouteImport } from './routes/_authenticated/admin.users'
+import { Route as AuthenticatedAdminInventoryRouteImport } from './routes/_authenticated/admin.inventory'
 
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
@@ -133,6 +134,12 @@ const AuthenticatedAdminUsersRoute = AuthenticatedAdminUsersRouteImport.update({
   path: '/users',
   getParentRoute: () => AuthenticatedAdminRoute,
 } as any)
+const AuthenticatedAdminInventoryRoute =
+  AuthenticatedAdminInventoryRouteImport.update({
+    id: '/inventory',
+    path: '/inventory',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -147,6 +154,7 @@ export interface FileRoutesByFullPath {
   '/support': typeof AuthenticatedSupportRoute
   '/viewed': typeof AuthenticatedViewedRoute
   '/wallet': typeof AuthenticatedWalletRoute
+  '/admin/inventory': typeof AuthenticatedAdminInventoryRoute
   '/admin/users': typeof AuthenticatedAdminUsersRoute
   '/orders/$id': typeof AuthenticatedOrdersIdRoute
   '/plans/credits': typeof AuthenticatedPlansCreditsRoute
@@ -167,6 +175,7 @@ export interface FileRoutesByTo {
   '/support': typeof AuthenticatedSupportRoute
   '/viewed': typeof AuthenticatedViewedRoute
   '/wallet': typeof AuthenticatedWalletRoute
+  '/admin/inventory': typeof AuthenticatedAdminInventoryRoute
   '/admin/users': typeof AuthenticatedAdminUsersRoute
   '/orders/$id': typeof AuthenticatedOrdersIdRoute
   '/plans/credits': typeof AuthenticatedPlansCreditsRoute
@@ -190,6 +199,7 @@ export interface FileRoutesById {
   '/_authenticated/support': typeof AuthenticatedSupportRoute
   '/_authenticated/viewed': typeof AuthenticatedViewedRoute
   '/_authenticated/wallet': typeof AuthenticatedWalletRoute
+  '/_authenticated/admin/inventory': typeof AuthenticatedAdminInventoryRoute
   '/_authenticated/admin/users': typeof AuthenticatedAdminUsersRoute
   '/_authenticated/orders/$id': typeof AuthenticatedOrdersIdRoute
   '/_authenticated/plans/credits': typeof AuthenticatedPlansCreditsRoute
@@ -213,6 +223,7 @@ export interface FileRouteTypes {
     | '/support'
     | '/viewed'
     | '/wallet'
+    | '/admin/inventory'
     | '/admin/users'
     | '/orders/$id'
     | '/plans/credits'
@@ -233,6 +244,7 @@ export interface FileRouteTypes {
     | '/support'
     | '/viewed'
     | '/wallet'
+    | '/admin/inventory'
     | '/admin/users'
     | '/orders/$id'
     | '/plans/credits'
@@ -255,6 +267,7 @@ export interface FileRouteTypes {
     | '/_authenticated/support'
     | '/_authenticated/viewed'
     | '/_authenticated/wallet'
+    | '/_authenticated/admin/inventory'
     | '/_authenticated/admin/users'
     | '/_authenticated/orders/$id'
     | '/_authenticated/plans/credits'
@@ -412,15 +425,24 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminUsersRouteImport
       parentRoute: typeof AuthenticatedAdminRoute
     }
+    '/_authenticated/admin/inventory': {
+      id: '/_authenticated/admin/inventory'
+      path: '/inventory'
+      fullPath: '/admin/inventory'
+      preLoaderRoute: typeof AuthenticatedAdminInventoryRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
   }
 }
 
 interface AuthenticatedAdminRouteChildren {
+  AuthenticatedAdminInventoryRoute: typeof AuthenticatedAdminInventoryRoute
   AuthenticatedAdminUsersRoute: typeof AuthenticatedAdminUsersRoute
   AuthenticatedAdminIndexRoute: typeof AuthenticatedAdminIndexRoute
 }
 
 const AuthenticatedAdminRouteChildren: AuthenticatedAdminRouteChildren = {
+  AuthenticatedAdminInventoryRoute: AuthenticatedAdminInventoryRoute,
   AuthenticatedAdminUsersRoute: AuthenticatedAdminUsersRoute,
   AuthenticatedAdminIndexRoute: AuthenticatedAdminIndexRoute,
 }
