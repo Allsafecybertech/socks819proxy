@@ -1,0 +1,171 @@
+// prisma/schema.prisma
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// ---------- ENUMS ----------
+
+enum DurationType {
+  CREDIT    // plan grants N proxy "views" total, no time limit
+  TIME      // plan grants unlimited views for N days
+  LIFETIME  // plan never expires and never runs out (manual admin control only)
+}
+
+enum SubscriptionStatus {
+  ACTIVE
+  EXPIRED
+  CANCELLED
+}
+
+enum ProxyStatus {
+  AVAILABLE   // in the pool, unassigned
+  ASSIGNED    // assigned to a subscription, hidden from user until "View"
+  REVEALED    // user clicked view, now in their 24h list
+  EXPIRED     // past its 24h reveal window or plan expiry
+  RECYCLED    // returned to pool for reassignment
+}
+
+enum OrderStatus {
+  PENDING_PAYMENT   // order created, waiting for user to submit proof
+  SUBMITTED         // user submitted tx hash + screenshot
+  VERIFIED          // admin confirmed on-chain, subscription activated
+  REJECTED          // admin rejected (bad hash, wrong amount, etc.)
+}
+
+enum CryptoCurrency {
+  USDT
+  BTC
+  LTC
+  USDC
+}
+
+enum FetchStatus {
+  RUNNING
+  PAUSED_FOR_CAPTCHA   // admin needs to take over manually
+  COMPLETED
+  FAILED
+}
+
+// Tracks a single Playwright fetch run so the admin dashboard can
+// show live status and, if needed, a "take over" viewer link.
+model FetchSession {
+  id            String      @id @default(cuid())
+  providerName  String
+  status        FetchStatus @default(RUNNING)
+  vncUrl        String?     // noVNC viewer URL for this run, shown in admin iframe
+  proxiesFound  Int         @default(0)
+  log           String?     @db.Text
+  startedAt     DateTime    @default(now())
+  completedAt   DateTime?
+}
+
+// ---------- CORE MODELS ----------
+
+model User {
+  id            String         @id @default(cuid())
+  email         String         @unique
+  passwordHash  String
+  isAdmin       Boolean        @default(false)
+  createdAt     DateTime       @default(now())
+
+  subscriptions Subscription[]
+  orders        Order[]
+}
+
+model Plan {
+  id            String         @id @default(cuid())
+  name          String         // e.g. "Starter 50", "Monthly Unlimited", "Lifetime Pro"
+  priceUsd      Decimal        @db.Decimal(10, 2)
+  proxyCount    Int            // how many proxies delivered on purchase (or per period)
+  durationType  DurationType
+  durationValue Int?           // days if TIME, credit count if CREDIT, null if LIFETIME
+  isActive      Boolean        @default(true)
+  createdAt     DateTime       @default(now())
+
+  subscriptions Subscription[]
+  orders        Order[]
+}
+
+model Subscription {
+  id                String             @id @default(cuid())
+  userId            String
+  user              User               @relation(fields: [userId], references: [id])
+  planId            String
+  plan              Plan               @relation(fields: [planId], references: [id])
+
+  status            SubscriptionStatus @default(ACTIVE)
+  remainingCredits  Int?               // used only for CREDIT plans
+  expiresAt         DateTime?          // used only for TIME plans
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
+
+  assignments       ProxyAssignment[]
+
+  @@index([userId, status])
+}
+
+model Proxy {
+  id            String            @id @default(cuid())
+  ip            String
+  port          Int
+  username      String
+  password      String
+  location      String?
+  providerName  String            // which upstream provider this came from
+  status        ProxyStatus       @default(AVAILABLE)
+  fetchedAt     DateTime          @default(now())
+
+  assignments   ProxyAssignment[]
+
+  @@index([status])
+}
+
+// Join table: which proxy is currently tied to which subscription,
+// and whether the user has "revealed" it yet (this is what drives
+// the hidden-until-click + 24h list behavior).
+model ProxyAssignment {
+  id             String       @id @default(cuid())
+  subscriptionId String
+  subscription   Subscription @relation(fields: [subscriptionId], references: [id])
+  proxyId        String
+  proxy          Proxy        @relation(fields: [proxyId], references: [id])
+
+  assignedAt     DateTime     @default(now())
+  revealedAt     DateTime?    // set when user clicks "View"
+  revealExpiresAt DateTime?   // revealedAt + 24h, sweep job checks this
+  status         ProxyStatus  @default(ASSIGNED)
+
+  @@index([subscriptionId, status])
+  @@index([revealExpiresAt])
+}
+
+model Order {
+  id              String         @id @default(cuid())
+  userId          String
+  user            User           @relation(fields: [userId], references: [id])
+  planId          String
+  plan            Plan           @relation(fields: [planId], references: [id])
+
+  currency        CryptoCurrency
+  walletAddress   String         // your receiving address shown to user
+  amountUsd       Decimal        @db.Decimal(10, 2)
+  amountCrypto    Decimal?       @db.Decimal(20, 8) // filled once you quote a rate
+
+  txHash          String?
+  screenshotUrl   String?
+  status          OrderStatus    @default(PENDING_PAYMENT)
+
+  createdAt       DateTime       @default(now())
+  submittedAt     DateTime?
+  verifiedAt      DateTime?
+  verifiedByAdmin String?        // admin user id
+
+  @@index([userId, status])
+  @@index([txHash])
+}
