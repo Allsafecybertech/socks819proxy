@@ -17,6 +17,7 @@ import { Route as AuthenticatedProxiesRouteImport } from './routes/_authenticate
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedBuyRouteImport } from './routes/_authenticated/buy'
 import { Route as AuthenticatedPlansDailyRouteImport } from './routes/_authenticated/plans.daily'
+import { Route as AuthenticatedPlansCreditsRouteImport } from './routes/_authenticated/plans.credits'
 
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
@@ -57,6 +58,12 @@ const AuthenticatedPlansDailyRoute = AuthenticatedPlansDailyRouteImport.update({
   path: '/plans/daily',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const AuthenticatedPlansCreditsRoute =
+  AuthenticatedPlansCreditsRouteImport.update({
+    id: '/plans/credits',
+    path: '/plans/credits',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -65,6 +72,7 @@ export interface FileRoutesByFullPath {
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/proxies': typeof AuthenticatedProxiesRoute
   '/viewed': typeof AuthenticatedViewedRoute
+  '/plans/credits': typeof AuthenticatedPlansCreditsRoute
   '/plans/daily': typeof AuthenticatedPlansDailyRoute
 }
 export interface FileRoutesByTo {
@@ -74,6 +82,7 @@ export interface FileRoutesByTo {
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/proxies': typeof AuthenticatedProxiesRoute
   '/viewed': typeof AuthenticatedViewedRoute
+  '/plans/credits': typeof AuthenticatedPlansCreditsRoute
   '/plans/daily': typeof AuthenticatedPlansDailyRoute
 }
 export interface FileRoutesById {
@@ -85,6 +94,7 @@ export interface FileRoutesById {
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/proxies': typeof AuthenticatedProxiesRoute
   '/_authenticated/viewed': typeof AuthenticatedViewedRoute
+  '/_authenticated/plans/credits': typeof AuthenticatedPlansCreditsRoute
   '/_authenticated/plans/daily': typeof AuthenticatedPlansDailyRoute
 }
 export interface FileRouteTypes {
@@ -96,6 +106,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/proxies'
     | '/viewed'
+    | '/plans/credits'
     | '/plans/daily'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -105,6 +116,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/proxies'
     | '/viewed'
+    | '/plans/credits'
     | '/plans/daily'
   id:
     | '__root__'
@@ -115,6 +127,7 @@ export interface FileRouteTypes {
     | '/_authenticated/dashboard'
     | '/_authenticated/proxies'
     | '/_authenticated/viewed'
+    | '/_authenticated/plans/credits'
     | '/_authenticated/plans/daily'
   fileRoutesById: FileRoutesById
 }
@@ -182,6 +195,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedPlansDailyRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/plans/credits': {
+      id: '/_authenticated/plans/credits'
+      path: '/plans/credits'
+      fullPath: '/plans/credits'
+      preLoaderRoute: typeof AuthenticatedPlansCreditsRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
   }
 }
 
@@ -190,6 +210,7 @@ interface AuthenticatedRouteChildren {
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedProxiesRoute: typeof AuthenticatedProxiesRoute
   AuthenticatedViewedRoute: typeof AuthenticatedViewedRoute
+  AuthenticatedPlansCreditsRoute: typeof AuthenticatedPlansCreditsRoute
   AuthenticatedPlansDailyRoute: typeof AuthenticatedPlansDailyRoute
 }
 
@@ -198,6 +219,7 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedProxiesRoute: AuthenticatedProxiesRoute,
   AuthenticatedViewedRoute: AuthenticatedViewedRoute,
+  AuthenticatedPlansCreditsRoute: AuthenticatedPlansCreditsRoute,
   AuthenticatedPlansDailyRoute: AuthenticatedPlansDailyRoute,
 }
 
