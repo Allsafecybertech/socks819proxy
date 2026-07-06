@@ -25,7 +25,7 @@ function SettingsPage() {
   useEffect(() => { load(); }, []);
 
   async function save(c: string) {
-    const { error } = await supabase.from("system_settings").upsert({ key: `wallet.${c}`, value: JSON.stringify(wallets[c] ?? "") as any });
+    const { error } = await supabase.from("system_settings").upsert({ key: `wallet.${c}`, value: (wallets[c] ?? "") as any });
     if (error) return toast.error(error.message);
     toast.success(`${CRYPTO_LABELS[c]} wallet saved`);
   }
