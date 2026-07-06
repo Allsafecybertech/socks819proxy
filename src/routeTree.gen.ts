@@ -28,6 +28,7 @@ import { Route as AuthenticatedPlansLifetimeRouteImport } from './routes/_authen
 import { Route as AuthenticatedPlansDailyRouteImport } from './routes/_authenticated/plans.daily'
 import { Route as AuthenticatedPlansCreditsRouteImport } from './routes/_authenticated/plans.credits'
 import { Route as AuthenticatedOrdersIdRouteImport } from './routes/_authenticated/orders.$id'
+import { Route as AuthenticatedAdminUsersRouteImport } from './routes/_authenticated/admin.users'
 
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
@@ -127,6 +128,11 @@ const AuthenticatedOrdersIdRoute = AuthenticatedOrdersIdRouteImport.update({
   path: '/orders/$id',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const AuthenticatedAdminUsersRoute = AuthenticatedAdminUsersRouteImport.update({
+  id: '/users',
+  path: '/users',
+  getParentRoute: () => AuthenticatedAdminRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -141,6 +147,7 @@ export interface FileRoutesByFullPath {
   '/support': typeof AuthenticatedSupportRoute
   '/viewed': typeof AuthenticatedViewedRoute
   '/wallet': typeof AuthenticatedWalletRoute
+  '/admin/users': typeof AuthenticatedAdminUsersRoute
   '/orders/$id': typeof AuthenticatedOrdersIdRoute
   '/plans/credits': typeof AuthenticatedPlansCreditsRoute
   '/plans/daily': typeof AuthenticatedPlansDailyRoute
@@ -160,6 +167,7 @@ export interface FileRoutesByTo {
   '/support': typeof AuthenticatedSupportRoute
   '/viewed': typeof AuthenticatedViewedRoute
   '/wallet': typeof AuthenticatedWalletRoute
+  '/admin/users': typeof AuthenticatedAdminUsersRoute
   '/orders/$id': typeof AuthenticatedOrdersIdRoute
   '/plans/credits': typeof AuthenticatedPlansCreditsRoute
   '/plans/daily': typeof AuthenticatedPlansDailyRoute
@@ -182,6 +190,7 @@ export interface FileRoutesById {
   '/_authenticated/support': typeof AuthenticatedSupportRoute
   '/_authenticated/viewed': typeof AuthenticatedViewedRoute
   '/_authenticated/wallet': typeof AuthenticatedWalletRoute
+  '/_authenticated/admin/users': typeof AuthenticatedAdminUsersRoute
   '/_authenticated/orders/$id': typeof AuthenticatedOrdersIdRoute
   '/_authenticated/plans/credits': typeof AuthenticatedPlansCreditsRoute
   '/_authenticated/plans/daily': typeof AuthenticatedPlansDailyRoute
@@ -204,6 +213,7 @@ export interface FileRouteTypes {
     | '/support'
     | '/viewed'
     | '/wallet'
+    | '/admin/users'
     | '/orders/$id'
     | '/plans/credits'
     | '/plans/daily'
@@ -223,6 +233,7 @@ export interface FileRouteTypes {
     | '/support'
     | '/viewed'
     | '/wallet'
+    | '/admin/users'
     | '/orders/$id'
     | '/plans/credits'
     | '/plans/daily'
@@ -244,6 +255,7 @@ export interface FileRouteTypes {
     | '/_authenticated/support'
     | '/_authenticated/viewed'
     | '/_authenticated/wallet'
+    | '/_authenticated/admin/users'
     | '/_authenticated/orders/$id'
     | '/_authenticated/plans/credits'
     | '/_authenticated/plans/daily'
@@ -393,14 +405,23 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedOrdersIdRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/admin/users': {
+      id: '/_authenticated/admin/users'
+      path: '/users'
+      fullPath: '/admin/users'
+      preLoaderRoute: typeof AuthenticatedAdminUsersRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
   }
 }
 
 interface AuthenticatedAdminRouteChildren {
+  AuthenticatedAdminUsersRoute: typeof AuthenticatedAdminUsersRoute
   AuthenticatedAdminIndexRoute: typeof AuthenticatedAdminIndexRoute
 }
 
 const AuthenticatedAdminRouteChildren: AuthenticatedAdminRouteChildren = {
+  AuthenticatedAdminUsersRoute: AuthenticatedAdminUsersRoute,
   AuthenticatedAdminIndexRoute: AuthenticatedAdminIndexRoute,
 }
 
