@@ -14,6 +14,7 @@ import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedWalletRouteImport } from './routes/_authenticated/wallet'
 import { Route as AuthenticatedViewedRouteImport } from './routes/_authenticated/viewed'
+import { Route as AuthenticatedSupportRouteImport } from './routes/_authenticated/support'
 import { Route as AuthenticatedProxiesRouteImport } from './routes/_authenticated/proxies'
 import { Route as AuthenticatedNotificationsRouteImport } from './routes/_authenticated/notifications'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
@@ -46,6 +47,11 @@ const AuthenticatedWalletRoute = AuthenticatedWalletRouteImport.update({
 const AuthenticatedViewedRoute = AuthenticatedViewedRouteImport.update({
   id: '/viewed',
   path: '/viewed',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedSupportRoute = AuthenticatedSupportRouteImport.update({
+  id: '/support',
+  path: '/support',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
 const AuthenticatedProxiesRoute = AuthenticatedProxiesRouteImport.update({
@@ -105,6 +111,7 @@ export interface FileRoutesByFullPath {
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/notifications': typeof AuthenticatedNotificationsRoute
   '/proxies': typeof AuthenticatedProxiesRoute
+  '/support': typeof AuthenticatedSupportRoute
   '/viewed': typeof AuthenticatedViewedRoute
   '/wallet': typeof AuthenticatedWalletRoute
   '/orders/$id': typeof AuthenticatedOrdersIdRoute
@@ -120,6 +127,7 @@ export interface FileRoutesByTo {
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/notifications': typeof AuthenticatedNotificationsRoute
   '/proxies': typeof AuthenticatedProxiesRoute
+  '/support': typeof AuthenticatedSupportRoute
   '/viewed': typeof AuthenticatedViewedRoute
   '/wallet': typeof AuthenticatedWalletRoute
   '/orders/$id': typeof AuthenticatedOrdersIdRoute
@@ -137,6 +145,7 @@ export interface FileRoutesById {
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/notifications': typeof AuthenticatedNotificationsRoute
   '/_authenticated/proxies': typeof AuthenticatedProxiesRoute
+  '/_authenticated/support': typeof AuthenticatedSupportRoute
   '/_authenticated/viewed': typeof AuthenticatedViewedRoute
   '/_authenticated/wallet': typeof AuthenticatedWalletRoute
   '/_authenticated/orders/$id': typeof AuthenticatedOrdersIdRoute
@@ -154,6 +163,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/notifications'
     | '/proxies'
+    | '/support'
     | '/viewed'
     | '/wallet'
     | '/orders/$id'
@@ -169,6 +179,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/notifications'
     | '/proxies'
+    | '/support'
     | '/viewed'
     | '/wallet'
     | '/orders/$id'
@@ -185,6 +196,7 @@ export interface FileRouteTypes {
     | '/_authenticated/dashboard'
     | '/_authenticated/notifications'
     | '/_authenticated/proxies'
+    | '/_authenticated/support'
     | '/_authenticated/viewed'
     | '/_authenticated/wallet'
     | '/_authenticated/orders/$id'
@@ -235,6 +247,13 @@ declare module '@tanstack/react-router' {
       path: '/viewed'
       fullPath: '/viewed'
       preLoaderRoute: typeof AuthenticatedViewedRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/support': {
+      id: '/_authenticated/support'
+      path: '/support'
+      fullPath: '/support'
+      preLoaderRoute: typeof AuthenticatedSupportRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
     '/_authenticated/proxies': {
@@ -308,6 +327,7 @@ interface AuthenticatedRouteChildren {
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedNotificationsRoute: typeof AuthenticatedNotificationsRoute
   AuthenticatedProxiesRoute: typeof AuthenticatedProxiesRoute
+  AuthenticatedSupportRoute: typeof AuthenticatedSupportRoute
   AuthenticatedViewedRoute: typeof AuthenticatedViewedRoute
   AuthenticatedWalletRoute: typeof AuthenticatedWalletRoute
   AuthenticatedOrdersIdRoute: typeof AuthenticatedOrdersIdRoute
@@ -322,6 +342,7 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedNotificationsRoute: AuthenticatedNotificationsRoute,
   AuthenticatedProxiesRoute: AuthenticatedProxiesRoute,
+  AuthenticatedSupportRoute: AuthenticatedSupportRoute,
   AuthenticatedViewedRoute: AuthenticatedViewedRoute,
   AuthenticatedWalletRoute: AuthenticatedWalletRoute,
   AuthenticatedOrdersIdRoute: AuthenticatedOrdersIdRoute,
