@@ -16,6 +16,7 @@ import { Route as AuthenticatedViewedRouteImport } from './routes/_authenticated
 import { Route as AuthenticatedProxiesRouteImport } from './routes/_authenticated/proxies'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedBuyRouteImport } from './routes/_authenticated/buy'
+import { Route as AuthenticatedOrdersIndexRouteImport } from './routes/_authenticated/orders.index'
 import { Route as AuthenticatedPlansLifetimeRouteImport } from './routes/_authenticated/plans.lifetime'
 import { Route as AuthenticatedPlansDailyRouteImport } from './routes/_authenticated/plans.daily'
 import { Route as AuthenticatedPlansCreditsRouteImport } from './routes/_authenticated/plans.credits'
@@ -54,6 +55,12 @@ const AuthenticatedBuyRoute = AuthenticatedBuyRouteImport.update({
   path: '/buy',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const AuthenticatedOrdersIndexRoute =
+  AuthenticatedOrdersIndexRouteImport.update({
+    id: '/orders/',
+    path: '/orders/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const AuthenticatedPlansLifetimeRoute =
   AuthenticatedPlansLifetimeRouteImport.update({
     id: '/plans/lifetime',
@@ -82,6 +89,7 @@ export interface FileRoutesByFullPath {
   '/plans/credits': typeof AuthenticatedPlansCreditsRoute
   '/plans/daily': typeof AuthenticatedPlansDailyRoute
   '/plans/lifetime': typeof AuthenticatedPlansLifetimeRoute
+  '/orders/': typeof AuthenticatedOrdersIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -93,6 +101,7 @@ export interface FileRoutesByTo {
   '/plans/credits': typeof AuthenticatedPlansCreditsRoute
   '/plans/daily': typeof AuthenticatedPlansDailyRoute
   '/plans/lifetime': typeof AuthenticatedPlansLifetimeRoute
+  '/orders': typeof AuthenticatedOrdersIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -106,6 +115,7 @@ export interface FileRoutesById {
   '/_authenticated/plans/credits': typeof AuthenticatedPlansCreditsRoute
   '/_authenticated/plans/daily': typeof AuthenticatedPlansDailyRoute
   '/_authenticated/plans/lifetime': typeof AuthenticatedPlansLifetimeRoute
+  '/_authenticated/orders/': typeof AuthenticatedOrdersIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -119,6 +129,7 @@ export interface FileRouteTypes {
     | '/plans/credits'
     | '/plans/daily'
     | '/plans/lifetime'
+    | '/orders/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -130,6 +141,7 @@ export interface FileRouteTypes {
     | '/plans/credits'
     | '/plans/daily'
     | '/plans/lifetime'
+    | '/orders'
   id:
     | '__root__'
     | '/'
@@ -142,6 +154,7 @@ export interface FileRouteTypes {
     | '/_authenticated/plans/credits'
     | '/_authenticated/plans/daily'
     | '/_authenticated/plans/lifetime'
+    | '/_authenticated/orders/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -201,6 +214,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedBuyRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/orders/': {
+      id: '/_authenticated/orders/'
+      path: '/orders'
+      fullPath: '/orders/'
+      preLoaderRoute: typeof AuthenticatedOrdersIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/plans/lifetime': {
       id: '/_authenticated/plans/lifetime'
       path: '/plans/lifetime'
@@ -233,6 +253,7 @@ interface AuthenticatedRouteChildren {
   AuthenticatedPlansCreditsRoute: typeof AuthenticatedPlansCreditsRoute
   AuthenticatedPlansDailyRoute: typeof AuthenticatedPlansDailyRoute
   AuthenticatedPlansLifetimeRoute: typeof AuthenticatedPlansLifetimeRoute
+  AuthenticatedOrdersIndexRoute: typeof AuthenticatedOrdersIndexRoute
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
@@ -243,6 +264,7 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedPlansCreditsRoute: AuthenticatedPlansCreditsRoute,
   AuthenticatedPlansDailyRoute: AuthenticatedPlansDailyRoute,
   AuthenticatedPlansLifetimeRoute: AuthenticatedPlansLifetimeRoute,
+  AuthenticatedOrdersIndexRoute: AuthenticatedOrdersIndexRoute,
 }
 
 const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(

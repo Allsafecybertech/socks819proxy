@@ -5,7 +5,7 @@ import { PageHeader, Pill, EmptyState } from "@/components/ui-kit";
 import { fmtUsd, fmtDate, statusColor, CRYPTO_LABELS } from "@/lib/format";
 import { Receipt } from "lucide-react";
 
-export const Route = createFileRoute("/_authenticated/orders")({
+export const Route = createFileRoute("/_authenticated/orders/")({
   head: () => ({ meta: [{ title: "Orders — NOVAIN SOCKS" }] }),
   component: OrdersPage,
 });
