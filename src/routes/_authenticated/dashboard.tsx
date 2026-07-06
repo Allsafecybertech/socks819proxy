@@ -49,7 +49,7 @@ function DashboardPage() {
 
   return (
     <>
-      <PageHeader title={`Welcome back${user?.email ? `, ${user.email.split("@")[0]}` : ""}`} subtitle="Snapshot of your account activity" />
+      <PageHeader title={`Welcome back${user?.email ? `, ${user.email.split("@")[0]}` : ""}`} subtitle="Snapshot of your account activity" right={<ClaimAdminBtn />} />
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
         <StatCard label="Active Plan" value={stats.sub?.plan_type ?? "None"} sub={stats.sub?.expires_at ? `Expires ${fmtDate(stats.sub.expires_at)}` : stats.sub ? "No expiry" : "No active plan"} icon={Activity} accent />
