@@ -13,6 +13,7 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedViewedRouteImport } from './routes/_authenticated/viewed'
+import { Route as AuthenticatedProxiesRouteImport } from './routes/_authenticated/proxies'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedBuyRouteImport } from './routes/_authenticated/buy'
 
@@ -35,6 +36,11 @@ const AuthenticatedViewedRoute = AuthenticatedViewedRouteImport.update({
   path: '/viewed',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const AuthenticatedProxiesRoute = AuthenticatedProxiesRouteImport.update({
+  id: '/proxies',
+  path: '/proxies',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
 const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
@@ -51,6 +57,7 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/buy': typeof AuthenticatedBuyRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/proxies': typeof AuthenticatedProxiesRoute
   '/viewed': typeof AuthenticatedViewedRoute
 }
 export interface FileRoutesByTo {
@@ -58,6 +65,7 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/buy': typeof AuthenticatedBuyRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/proxies': typeof AuthenticatedProxiesRoute
   '/viewed': typeof AuthenticatedViewedRoute
 }
 export interface FileRoutesById {
@@ -67,13 +75,14 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/_authenticated/buy': typeof AuthenticatedBuyRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
+  '/_authenticated/proxies': typeof AuthenticatedProxiesRoute
   '/_authenticated/viewed': typeof AuthenticatedViewedRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/auth' | '/buy' | '/dashboard' | '/viewed'
+  fullPaths: '/' | '/auth' | '/buy' | '/dashboard' | '/proxies' | '/viewed'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/auth' | '/buy' | '/dashboard' | '/viewed'
+  to: '/' | '/auth' | '/buy' | '/dashboard' | '/proxies' | '/viewed'
   id:
     | '__root__'
     | '/'
@@ -81,6 +90,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/_authenticated/buy'
     | '/_authenticated/dashboard'
+    | '/_authenticated/proxies'
     | '/_authenticated/viewed'
   fileRoutesById: FileRoutesById
 }
@@ -120,6 +130,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedViewedRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/proxies': {
+      id: '/_authenticated/proxies'
+      path: '/proxies'
+      fullPath: '/proxies'
+      preLoaderRoute: typeof AuthenticatedProxiesRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/dashboard': {
       id: '/_authenticated/dashboard'
       path: '/dashboard'
@@ -140,12 +157,14 @@ declare module '@tanstack/react-router' {
 interface AuthenticatedRouteChildren {
   AuthenticatedBuyRoute: typeof AuthenticatedBuyRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
+  AuthenticatedProxiesRoute: typeof AuthenticatedProxiesRoute
   AuthenticatedViewedRoute: typeof AuthenticatedViewedRoute
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedBuyRoute: AuthenticatedBuyRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
+  AuthenticatedProxiesRoute: AuthenticatedProxiesRoute,
   AuthenticatedViewedRoute: AuthenticatedViewedRoute,
 }
 
