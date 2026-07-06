@@ -20,6 +20,7 @@ import { Route as AuthenticatedOrdersIndexRouteImport } from './routes/_authenti
 import { Route as AuthenticatedPlansLifetimeRouteImport } from './routes/_authenticated/plans.lifetime'
 import { Route as AuthenticatedPlansDailyRouteImport } from './routes/_authenticated/plans.daily'
 import { Route as AuthenticatedPlansCreditsRouteImport } from './routes/_authenticated/plans.credits'
+import { Route as AuthenticatedOrdersIdRouteImport } from './routes/_authenticated/orders.$id'
 
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
@@ -78,6 +79,11 @@ const AuthenticatedPlansCreditsRoute =
     path: '/plans/credits',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
+const AuthenticatedOrdersIdRoute = AuthenticatedOrdersIdRouteImport.update({
+  id: '/orders/$id',
+  path: '/orders/$id',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -86,6 +92,7 @@ export interface FileRoutesByFullPath {
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/proxies': typeof AuthenticatedProxiesRoute
   '/viewed': typeof AuthenticatedViewedRoute
+  '/orders/$id': typeof AuthenticatedOrdersIdRoute
   '/plans/credits': typeof AuthenticatedPlansCreditsRoute
   '/plans/daily': typeof AuthenticatedPlansDailyRoute
   '/plans/lifetime': typeof AuthenticatedPlansLifetimeRoute
@@ -98,6 +105,7 @@ export interface FileRoutesByTo {
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/proxies': typeof AuthenticatedProxiesRoute
   '/viewed': typeof AuthenticatedViewedRoute
+  '/orders/$id': typeof AuthenticatedOrdersIdRoute
   '/plans/credits': typeof AuthenticatedPlansCreditsRoute
   '/plans/daily': typeof AuthenticatedPlansDailyRoute
   '/plans/lifetime': typeof AuthenticatedPlansLifetimeRoute
@@ -112,6 +120,7 @@ export interface FileRoutesById {
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/proxies': typeof AuthenticatedProxiesRoute
   '/_authenticated/viewed': typeof AuthenticatedViewedRoute
+  '/_authenticated/orders/$id': typeof AuthenticatedOrdersIdRoute
   '/_authenticated/plans/credits': typeof AuthenticatedPlansCreditsRoute
   '/_authenticated/plans/daily': typeof AuthenticatedPlansDailyRoute
   '/_authenticated/plans/lifetime': typeof AuthenticatedPlansLifetimeRoute
@@ -126,6 +135,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/proxies'
     | '/viewed'
+    | '/orders/$id'
     | '/plans/credits'
     | '/plans/daily'
     | '/plans/lifetime'
@@ -138,6 +148,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/proxies'
     | '/viewed'
+    | '/orders/$id'
     | '/plans/credits'
     | '/plans/daily'
     | '/plans/lifetime'
@@ -151,6 +162,7 @@ export interface FileRouteTypes {
     | '/_authenticated/dashboard'
     | '/_authenticated/proxies'
     | '/_authenticated/viewed'
+    | '/_authenticated/orders/$id'
     | '/_authenticated/plans/credits'
     | '/_authenticated/plans/daily'
     | '/_authenticated/plans/lifetime'
@@ -242,6 +254,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedPlansCreditsRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/orders/$id': {
+      id: '/_authenticated/orders/$id'
+      path: '/orders/$id'
+      fullPath: '/orders/$id'
+      preLoaderRoute: typeof AuthenticatedOrdersIdRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
   }
 }
 
@@ -250,6 +269,7 @@ interface AuthenticatedRouteChildren {
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedProxiesRoute: typeof AuthenticatedProxiesRoute
   AuthenticatedViewedRoute: typeof AuthenticatedViewedRoute
+  AuthenticatedOrdersIdRoute: typeof AuthenticatedOrdersIdRoute
   AuthenticatedPlansCreditsRoute: typeof AuthenticatedPlansCreditsRoute
   AuthenticatedPlansDailyRoute: typeof AuthenticatedPlansDailyRoute
   AuthenticatedPlansLifetimeRoute: typeof AuthenticatedPlansLifetimeRoute
@@ -261,6 +281,7 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedProxiesRoute: AuthenticatedProxiesRoute,
   AuthenticatedViewedRoute: AuthenticatedViewedRoute,
+  AuthenticatedOrdersIdRoute: AuthenticatedOrdersIdRoute,
   AuthenticatedPlansCreditsRoute: AuthenticatedPlansCreditsRoute,
   AuthenticatedPlansDailyRoute: AuthenticatedPlansDailyRoute,
   AuthenticatedPlansLifetimeRoute: AuthenticatedPlansLifetimeRoute,
