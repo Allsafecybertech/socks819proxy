@@ -10,12 +10,16 @@ export const Route = createFileRoute("/_authenticated/admin")({
 function AdminGate() {
   const { isAdmin, loading, user } = useAuth();
   const nav = useNavigate();
+
   useEffect(() => {
     if (!loading && user && !isAdmin) {
       toast.error("Admin access required");
       nav({ to: "/dashboard" });
     }
-  }, [loading, isAdmin, user]);
-  if (loading || !isAdmin) return <div className="text-muted-foreground">Loading…</div>;
+  }, [loading, isAdmin, user, nav]);
+
+  if (loading) return <div className="text-muted-foreground">Checking access…</div>;
+  if (!isAdmin) return <div className="text-muted-foreground">Loading…</div>;
+
   return <Outlet />;
 }
