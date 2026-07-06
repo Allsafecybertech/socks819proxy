@@ -15,6 +15,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedWalletRouteImport } from './routes/_authenticated/wallet'
 import { Route as AuthenticatedViewedRouteImport } from './routes/_authenticated/viewed'
 import { Route as AuthenticatedProxiesRouteImport } from './routes/_authenticated/proxies'
+import { Route as AuthenticatedNotificationsRouteImport } from './routes/_authenticated/notifications'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedBuyRouteImport } from './routes/_authenticated/buy'
 import { Route as AuthenticatedOrdersIndexRouteImport } from './routes/_authenticated/orders.index'
@@ -52,6 +53,12 @@ const AuthenticatedProxiesRoute = AuthenticatedProxiesRouteImport.update({
   path: '/proxies',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const AuthenticatedNotificationsRoute =
+  AuthenticatedNotificationsRouteImport.update({
+    id: '/notifications',
+    path: '/notifications',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
@@ -96,6 +103,7 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/buy': typeof AuthenticatedBuyRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/notifications': typeof AuthenticatedNotificationsRoute
   '/proxies': typeof AuthenticatedProxiesRoute
   '/viewed': typeof AuthenticatedViewedRoute
   '/wallet': typeof AuthenticatedWalletRoute
@@ -110,6 +118,7 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/buy': typeof AuthenticatedBuyRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/notifications': typeof AuthenticatedNotificationsRoute
   '/proxies': typeof AuthenticatedProxiesRoute
   '/viewed': typeof AuthenticatedViewedRoute
   '/wallet': typeof AuthenticatedWalletRoute
@@ -126,6 +135,7 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/_authenticated/buy': typeof AuthenticatedBuyRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
+  '/_authenticated/notifications': typeof AuthenticatedNotificationsRoute
   '/_authenticated/proxies': typeof AuthenticatedProxiesRoute
   '/_authenticated/viewed': typeof AuthenticatedViewedRoute
   '/_authenticated/wallet': typeof AuthenticatedWalletRoute
@@ -142,6 +152,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/buy'
     | '/dashboard'
+    | '/notifications'
     | '/proxies'
     | '/viewed'
     | '/wallet'
@@ -156,6 +167,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/buy'
     | '/dashboard'
+    | '/notifications'
     | '/proxies'
     | '/viewed'
     | '/wallet'
@@ -171,6 +183,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/_authenticated/buy'
     | '/_authenticated/dashboard'
+    | '/_authenticated/notifications'
     | '/_authenticated/proxies'
     | '/_authenticated/viewed'
     | '/_authenticated/wallet'
@@ -231,6 +244,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedProxiesRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/notifications': {
+      id: '/_authenticated/notifications'
+      path: '/notifications'
+      fullPath: '/notifications'
+      preLoaderRoute: typeof AuthenticatedNotificationsRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/dashboard': {
       id: '/_authenticated/dashboard'
       path: '/dashboard'
@@ -286,6 +306,7 @@ declare module '@tanstack/react-router' {
 interface AuthenticatedRouteChildren {
   AuthenticatedBuyRoute: typeof AuthenticatedBuyRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
+  AuthenticatedNotificationsRoute: typeof AuthenticatedNotificationsRoute
   AuthenticatedProxiesRoute: typeof AuthenticatedProxiesRoute
   AuthenticatedViewedRoute: typeof AuthenticatedViewedRoute
   AuthenticatedWalletRoute: typeof AuthenticatedWalletRoute
@@ -299,6 +320,7 @@ interface AuthenticatedRouteChildren {
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedBuyRoute: AuthenticatedBuyRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
+  AuthenticatedNotificationsRoute: AuthenticatedNotificationsRoute,
   AuthenticatedProxiesRoute: AuthenticatedProxiesRoute,
   AuthenticatedViewedRoute: AuthenticatedViewedRoute,
   AuthenticatedWalletRoute: AuthenticatedWalletRoute,
