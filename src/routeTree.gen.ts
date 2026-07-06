@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthenticatedWalletRouteImport } from './routes/_authenticated/wallet'
 import { Route as AuthenticatedViewedRouteImport } from './routes/_authenticated/viewed'
 import { Route as AuthenticatedProxiesRouteImport } from './routes/_authenticated/proxies'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
@@ -35,6 +36,11 @@ const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedWalletRoute = AuthenticatedWalletRouteImport.update({
+  id: '/wallet',
+  path: '/wallet',
+  getParentRoute: () => AuthenticatedRoute,
 } as any)
 const AuthenticatedViewedRoute = AuthenticatedViewedRouteImport.update({
   id: '/viewed',
@@ -92,6 +98,7 @@ export interface FileRoutesByFullPath {
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/proxies': typeof AuthenticatedProxiesRoute
   '/viewed': typeof AuthenticatedViewedRoute
+  '/wallet': typeof AuthenticatedWalletRoute
   '/orders/$id': typeof AuthenticatedOrdersIdRoute
   '/plans/credits': typeof AuthenticatedPlansCreditsRoute
   '/plans/daily': typeof AuthenticatedPlansDailyRoute
@@ -105,6 +112,7 @@ export interface FileRoutesByTo {
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/proxies': typeof AuthenticatedProxiesRoute
   '/viewed': typeof AuthenticatedViewedRoute
+  '/wallet': typeof AuthenticatedWalletRoute
   '/orders/$id': typeof AuthenticatedOrdersIdRoute
   '/plans/credits': typeof AuthenticatedPlansCreditsRoute
   '/plans/daily': typeof AuthenticatedPlansDailyRoute
@@ -120,6 +128,7 @@ export interface FileRoutesById {
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/proxies': typeof AuthenticatedProxiesRoute
   '/_authenticated/viewed': typeof AuthenticatedViewedRoute
+  '/_authenticated/wallet': typeof AuthenticatedWalletRoute
   '/_authenticated/orders/$id': typeof AuthenticatedOrdersIdRoute
   '/_authenticated/plans/credits': typeof AuthenticatedPlansCreditsRoute
   '/_authenticated/plans/daily': typeof AuthenticatedPlansDailyRoute
@@ -135,6 +144,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/proxies'
     | '/viewed'
+    | '/wallet'
     | '/orders/$id'
     | '/plans/credits'
     | '/plans/daily'
@@ -148,6 +158,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/proxies'
     | '/viewed'
+    | '/wallet'
     | '/orders/$id'
     | '/plans/credits'
     | '/plans/daily'
@@ -162,6 +173,7 @@ export interface FileRouteTypes {
     | '/_authenticated/dashboard'
     | '/_authenticated/proxies'
     | '/_authenticated/viewed'
+    | '/_authenticated/wallet'
     | '/_authenticated/orders/$id'
     | '/_authenticated/plans/credits'
     | '/_authenticated/plans/daily'
@@ -197,6 +209,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/wallet': {
+      id: '/_authenticated/wallet'
+      path: '/wallet'
+      fullPath: '/wallet'
+      preLoaderRoute: typeof AuthenticatedWalletRouteImport
+      parentRoute: typeof AuthenticatedRoute
     }
     '/_authenticated/viewed': {
       id: '/_authenticated/viewed'
@@ -269,6 +288,7 @@ interface AuthenticatedRouteChildren {
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedProxiesRoute: typeof AuthenticatedProxiesRoute
   AuthenticatedViewedRoute: typeof AuthenticatedViewedRoute
+  AuthenticatedWalletRoute: typeof AuthenticatedWalletRoute
   AuthenticatedOrdersIdRoute: typeof AuthenticatedOrdersIdRoute
   AuthenticatedPlansCreditsRoute: typeof AuthenticatedPlansCreditsRoute
   AuthenticatedPlansDailyRoute: typeof AuthenticatedPlansDailyRoute
@@ -281,6 +301,7 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedProxiesRoute: AuthenticatedProxiesRoute,
   AuthenticatedViewedRoute: AuthenticatedViewedRoute,
+  AuthenticatedWalletRoute: AuthenticatedWalletRoute,
   AuthenticatedOrdersIdRoute: AuthenticatedOrdersIdRoute,
   AuthenticatedPlansCreditsRoute: AuthenticatedPlansCreditsRoute,
   AuthenticatedPlansDailyRoute: AuthenticatedPlansDailyRoute,
