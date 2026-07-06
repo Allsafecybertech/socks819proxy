@@ -90,3 +90,22 @@ function DashboardPage() {
     </>
   );
 }
+
+function ClaimAdminBtn() {
+  const [visible, setVisible] = useState(false);
+  useEffect(() => {
+    supabase.from("user_roles").select("id", { count: "exact", head: true }).eq("role", "admin")
+      .then(({ count }) => setVisible((count ?? 0) === 0));
+  }, []);
+  if (!visible) return null;
+  async function claim() {
+    const { data, error } = await supabase.rpc("claim_first_admin");
+    if (error) return;
+    if (data) window.location.reload();
+  }
+  return (
+    <button onClick={claim} className="text-xs px-3 py-1.5 rounded-lg border border-accent/40 bg-accent/10 text-accent hover:bg-accent/20">
+      Become first admin
+    </button>
+  );
+}
