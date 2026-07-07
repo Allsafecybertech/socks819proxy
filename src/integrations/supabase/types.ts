@@ -572,6 +572,7 @@ export type Database = {
     Functions: {
       activate_order: { Args: { _order_id: string }; Returns: string }
       claim_first_admin: { Args: never; Returns: boolean }
+      grant_admin: { Args: { _email: string }; Returns: boolean }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
@@ -596,6 +597,7 @@ export type Database = {
           view_id: string
         }[]
       }
+      revoke_admin: { Args: { _email: string }; Returns: boolean }
     }
     Enums: {
       app_role: "admin" | "user"
