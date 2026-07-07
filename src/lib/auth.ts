@@ -47,13 +47,21 @@ export function useAuth(): AuthState {
     setLoading(true);
 
     const loadAdminStatus = async () => {
-      const { data, error } = await supabase
-        .from("user_roles")
-        .select("role")
-        .eq("user_id", session.user.id);
-
+      // Prefer the has_role RPC (SECURITY DEFINER, RLS-proof).
+      const rpc = await supabase.rpc("has_role", {
+        _user_id: session.user.id,
+        _role: "admin",
+      });
+      let admin = !!rpc.data;
+      if (rpc.error) {
+        const { data } = await supabase
+          .from("user_roles")
+          .select("role")
+          .eq("user_id", session.user.id);
+        admin = !!data?.some((r) => r.role === "admin");
+      }
       if (!mounted) return;
-      setIsAdmin(!error && !!data?.some((r) => r.role === "admin"));
+      setIsAdmin(admin);
       setLoading(false);
     };
 
