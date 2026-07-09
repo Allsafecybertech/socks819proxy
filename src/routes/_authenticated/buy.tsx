@@ -49,7 +49,7 @@ function BuyPage() {
     supabase.from("viewed_proxies").select("id", { count: "exact", head: true }).gte("revealed_at", since.toISOString())
       .then(({ count }) => setUsed(count ?? 0));
     supabase.from("subscriptions").select("plans(max_reveals)").eq("user_id", user.id).eq("is_active", true).maybeSingle()
-      .then(({ data }) => { const q = (data as any)?.plans?.max_reveals; if (q) setQuota(q); });
+      .then(({ data }) => { const q = (data as any)?.max_reveals; if (q) setQuota(q); });
   }, [user?.id]);
 
   const countries = useMemo(() => Array.from(new Set(rows.map((r) => r.country).filter(Boolean))).sort() as string[], [rows]);

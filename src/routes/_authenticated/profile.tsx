@@ -65,8 +65,8 @@ function ProfilePage() {
   }
 
   const planName = sub?.plans?.name ?? "No active plan";
-  const quota = sub?.plans?.max_reveals ?? 0;
-  const expiresAt = sub?.end_at;
+  const quota = sub?.max_reveals ?? 0;
+  const expiresAt = sub?.expires_at;
 
   return (
     <>
