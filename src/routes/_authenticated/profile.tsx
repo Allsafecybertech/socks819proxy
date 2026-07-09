@@ -32,7 +32,7 @@ function ProfilePage() {
     if (!user) return;
     supabase.from("profiles").select("*").eq("id", user.id).maybeSingle()
       .then(({ data }) => { setProfile(data); setUsername(data?.username ?? ""); });
-    supabase.from("subscriptions").select("*, plans(name, max_reveals, plan_type)").eq("user_id", user.id).eq("status", "active").maybeSingle()
+    supabase.from("subscriptions").select("*, plans(name, max_reveals, plan_type)").eq("user_id", user.id).eq("is_active", true).maybeSingle()
       .then(({ data }) => setSub(data));
     supabase.from("credit_balances").select("balance").eq("user_id", user.id).maybeSingle()
       .then(({ data }) => setCredits((data as any)?.balance ?? 0));
