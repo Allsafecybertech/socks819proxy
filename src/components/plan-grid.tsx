@@ -6,9 +6,15 @@ import { useNavigate } from "@tanstack/react-router";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
-import { Check } from "lucide-react";
+import { Zap, Calendar, CalendarCheck, CalendarDays, Medal, Trophy, Crown } from "lucide-react";
 import { useAuth } from "@/lib/auth";
 
+/**
+ * PlanGrid — reference-style colorful plan cards.
+ * - type="time" → 1 Day / 15 Days / 30 Days / 365 Days (icon+badge header, "N socks $X")
+ * - type="credit" → Starter / Standard / Premium (multiple credit tiers per card)
+ * - type="lifetime" → Standard grid
+ */
 export function PlanGrid({ type }: { type: "time" | "credit" | "lifetime" }) {
   const nav = useNavigate();
   const { user } = useAuth();
@@ -38,34 +44,28 @@ export function PlanGrid({ type }: { type: "time" | "credit" | "lifetime" }) {
     nav({ to: "/orders/$id", params: { id: data.id } });
   }
 
+  if (type === "credit") return <CreditGrid plans={plans} onBuy={setBuying} dialog={dialog()} />;
+  if (type === "time") return <TimeGrid plans={plans} onBuy={setBuying} dialog={dialog()} />;
+
+  // lifetime — simple grid
   return (
     <>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {plans.map((p) => (
-          <div key={p.id} className="glass-card rounded-2xl p-6 relative overflow-hidden hover:border-primary/40 transition group">
-            <div className="absolute -top-16 -right-16 w-40 h-40 rounded-full bg-primary/10 blur-3xl opacity-0 group-hover:opacity-100 transition" />
-            <div className="relative">
-              <div className="text-xs uppercase tracking-widest text-muted-foreground font-semibold">{type}</div>
-              <div className="text-2xl font-bold mt-1">{p.name}</div>
-              <div className="mt-4 flex items-baseline gap-1">
-                <span className="text-4xl font-bold text-gradient">{fmtUsd(p.price_usd)}</span>
-                {type === "time" && <span className="text-xs text-muted-foreground">/ {p.duration_days}d</span>}
-              </div>
-              <ul className="mt-5 space-y-2 text-sm">
-                {p.duration_days && <Feat text={`${p.duration_days} days access`} />}
-                {p.max_reveals && <Feat text={`${p.max_reveals.toLocaleString()} reveals included`} />}
-                {p.credits && <Feat text={`${p.credits} reveal credits`} />}
-                {p.credits && <Feat text="Credits never expire" />}
-                {p.unlimited && <Feat text="Unlimited reveals" />}
-                {type === "lifetime" && <Feat text="Never expires" />}
-                <Feat text="Instant activation on approval" />
-              </ul>
-              <Button className="w-full mt-6 gradient-primary" onClick={() => setBuying(p)}>Get Plan</Button>
-            </div>
+          <div key={p.id} className="glass-card rounded-2xl p-6 hover:border-primary/40 transition">
+            <div className="text-xs uppercase tracking-widest text-muted-foreground">Lifetime</div>
+            <div className="text-2xl font-bold mt-1">{p.name}</div>
+            <div className="text-3xl font-bold text-gradient mt-4">{fmtUsd(p.price_usd)}</div>
+            <Button className="w-full mt-5 gradient-primary" onClick={() => setBuying(p)}>Get Plan</Button>
           </div>
         ))}
       </div>
+      {dialog()}
+    </>
+  );
 
+  function dialog() {
+    return (
       <Dialog open={!!buying} onOpenChange={(o) => !o && setBuying(null)}>
         <DialogContent>
           <DialogHeader><DialogTitle>Checkout — {buying?.name}</DialogTitle></DialogHeader>
@@ -88,10 +88,101 @@ export function PlanGrid({ type }: { type: "time" | "credit" | "lifetime" }) {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+    );
+  }
+}
+
+/* ---------------- TIME (Daily) plans ---------------- */
+function TimeGrid({ plans, onBuy, dialog }: { plans: any[]; onBuy: (p: any) => void; dialog: React.ReactNode }) {
+  const styles: Record<number, { bg: string; badgeBg: string; badgeText: string; label: string; icon: any }> = {
+    1: { bg: "from-purple-600 to-fuchsia-700", badgeBg: "bg-fuchsia-400/30", badgeText: "text-fuchsia-100", label: "TEST", icon: Zap },
+    15: { bg: "from-sky-500 to-blue-600", badgeBg: "bg-pink-400/30", badgeText: "text-pink-100", label: "CHEAP", icon: Calendar },
+    30: { bg: "from-emerald-500 to-green-600", badgeBg: "bg-emerald-300/30", badgeText: "text-emerald-100", label: "POPULAR", icon: CalendarCheck },
+    365: { bg: "from-violet-500 to-purple-600", badgeBg: "bg-amber-400/30", badgeText: "text-amber-100", label: "SAVING", icon: CalendarDays },
+  };
+  return (
+    <>
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        {plans.map((p) => {
+          const s = styles[p.duration_days ?? 0] ?? styles[30];
+          const Icon = s.icon;
+          return (
+            <button key={p.id} onClick={() => onBuy(p)} className="glass-card rounded-2xl overflow-hidden text-left hover:scale-[1.02] transition-transform">
+              <div className={`bg-gradient-to-br ${s.bg} p-5 text-center relative`}>
+                <Icon className="w-6 h-6 mx-auto text-white/95" />
+                <div className="text-white font-bold text-xl mt-1.5">{p.duration_days} {p.duration_days === 1 ? "Day" : "Days"}</div>
+                <span className={`inline-block mt-2 text-[10px] font-bold px-2.5 py-0.5 rounded-full ${s.badgeBg} ${s.badgeText}`}>{s.label}</span>
+              </div>
+              <div className="p-4 flex items-baseline justify-between">
+                <div><span className="text-lg font-bold">{p.max_reveals ?? 100}</span> <span className="text-xs text-muted-foreground">socks</span></div>
+                <div className="text-success font-bold">{fmtUsd(p.price_usd)}</div>
+              </div>
+            </button>
+          );
+        })}
+      </div>
+      <p className="text-center text-xs text-muted-foreground mt-4 flex items-center justify-center gap-1.5">
+        <span className="w-1.5 h-1.5 rounded-full bg-primary inline-block" /> Click on any plan to select payment method
+      </p>
+      {dialog}
     </>
   );
 }
 
-function Feat({ text }: { text: string }) {
-  return <li className="flex gap-2 items-start"><Check className="w-4 h-4 mt-0.5 text-success" /><span>{text}</span></li>;
+/* ---------------- CREDIT plans (3 tiered cards with multiple tiers) ---------------- */
+function CreditGrid({ plans, onBuy, dialog }: { plans: any[]; onBuy: (p: any) => void; dialog: React.ReactNode }) {
+  // Group by tier via sort_order / price bands: Starter (cheapest 2), Standard (mid 2), Premium (top)
+  const sorted = [...plans].sort((a, b) => Number(a.price_usd) - Number(b.price_usd));
+  const tiers = [
+    { name: "Starter", tagline: "Perfect for beginners", bg: "from-orange-500 to-amber-600", icon: Medal, iconBg: "bg-white/25", accent: "text-orange-100" },
+    { name: "Standard", tagline: "Most popular choice", bg: "from-slate-400 to-slate-600", icon: Trophy, iconBg: "bg-white/25", accent: "text-slate-100", badge: { label: "POPULAR", bg: "bg-slate-300/40 text-slate-50" } },
+    { name: "Premium", tagline: "Best value for pros", bg: "from-yellow-400 to-amber-500", icon: Crown, iconBg: "bg-black/20", accent: "text-yellow-950", badge: { label: "BEST DEAL", bg: "bg-red-500 text-white" } },
+  ];
+  const groups: any[][] = [[], [], []];
+  sorted.forEach((p, i) => {
+    const g = i < 2 ? 0 : i < 4 ? 1 : 2;
+    groups[g].push(p);
+  });
+
+  return (
+    <>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        {tiers.map((t, i) => {
+          const Icon = t.icon;
+          const groupPlans = groups[i];
+          return (
+            <div key={t.name} className="glass-card rounded-2xl overflow-hidden">
+              <div className={`bg-gradient-to-br ${t.bg} p-6 text-center relative`}>
+                {t.badge && (
+                  <span className={`absolute top-3 right-3 text-[10px] font-bold px-2 py-0.5 rounded-full ${t.badge.bg}`}>{t.badge.label}</span>
+                )}
+                <div className={`w-12 h-12 rounded-full ${t.iconBg} mx-auto flex items-center justify-center`}>
+                  <Icon className={`w-6 h-6 ${i === 2 ? "text-yellow-950" : "text-white"}`} />
+                </div>
+                <div className={`font-bold text-xl mt-2 ${i === 2 ? "text-yellow-950" : "text-white"}`}>{t.name}</div>
+                <div className={`text-xs mt-0.5 ${t.accent}`}>{t.tagline}</div>
+              </div>
+              <div className="p-4 space-y-2">
+                {groupPlans.length === 0 && (
+                  <div className="text-center text-xs text-muted-foreground py-6">Coming soon</div>
+                )}
+                {groupPlans.map((p) => (
+                  <button key={p.id} onClick={() => onBuy(p)}
+                    className="w-full flex items-baseline justify-between px-3 py-2.5 rounded-lg bg-muted/30 hover:bg-primary/10 border border-border/40 hover:border-primary/40 transition">
+                    <div>
+                      <span className="text-base font-bold">{p.credits ?? 0}</span>
+                      <span className="text-xs text-muted-foreground ml-1">credits</span>
+                    </div>
+                    <div className="text-success font-bold">{fmtUsd(p.price_usd)}</div>
+                  </button>
+                ))}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+      <p className="text-center text-xs text-muted-foreground mt-4">∞ Credits never expire — use anytime!</p>
+      {dialog}
+    </>
+  );
 }
