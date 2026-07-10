@@ -14,6 +14,71 @@ export type Database = {
   }
   public: {
     Tables: {
+      announcement_dismissals: {
+        Row: {
+          announcement_id: string
+          dismissed_at: string
+          user_id: string
+        }
+        Insert: {
+          announcement_id: string
+          dismissed_at?: string
+          user_id: string
+        }
+        Update: {
+          announcement_id?: string
+          dismissed_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "announcement_dismissals_announcement_id_fkey"
+            columns: ["announcement_id"]
+            isOneToOne: false
+            referencedRelation: "announcements"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      announcements: {
+        Row: {
+          body: string
+          created_at: string
+          created_by: string | null
+          ends_at: string | null
+          id: string
+          is_active: boolean
+          severity: string
+          starts_at: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          body: string
+          created_at?: string
+          created_by?: string | null
+          ends_at?: string | null
+          id?: string
+          is_active?: boolean
+          severity?: string
+          starts_at?: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          body?: string
+          created_at?: string
+          created_by?: string | null
+          ends_at?: string | null
+          id?: string
+          is_active?: boolean
+          severity?: string
+          starts_at?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       audit_log: {
         Row: {
           action: string
@@ -64,15 +129,23 @@ export type Database = {
       }
       inventory: {
         Row: {
+          assigned_at: string | null
+          assigned_order_id: string | null
           assigned_user: string | null
+          assigned_user_id: string | null
+          assignment_expires_at: string | null
           auth_type: string | null
+          blacklisted: boolean
           city: string | null
           country: string
           created_at: string
           host: string | null
           id: string
           ip: string
+          is_online: boolean
           isp: string | null
+          last_checked_at: string | null
+          last_view_at: string | null
           password: string | null
           port: number
           proxy_kind: string | null
@@ -84,15 +157,23 @@ export type Database = {
           zipcode: string | null
         }
         Insert: {
+          assigned_at?: string | null
+          assigned_order_id?: string | null
           assigned_user?: string | null
+          assigned_user_id?: string | null
+          assignment_expires_at?: string | null
           auth_type?: string | null
+          blacklisted?: boolean
           city?: string | null
           country: string
           created_at?: string
           host?: string | null
           id?: string
           ip: string
+          is_online?: boolean
           isp?: string | null
+          last_checked_at?: string | null
+          last_view_at?: string | null
           password?: string | null
           port: number
           proxy_kind?: string | null
@@ -104,15 +185,23 @@ export type Database = {
           zipcode?: string | null
         }
         Update: {
+          assigned_at?: string | null
+          assigned_order_id?: string | null
           assigned_user?: string | null
+          assigned_user_id?: string | null
+          assignment_expires_at?: string | null
           auth_type?: string | null
+          blacklisted?: boolean
           city?: string | null
           country?: string
           created_at?: string
           host?: string | null
           id?: string
           ip?: string
+          is_online?: boolean
           isp?: string | null
+          last_checked_at?: string | null
+          last_view_at?: string | null
           password?: string | null
           port?: number
           proxy_kind?: string | null
@@ -160,9 +249,11 @@ export type Database = {
           admin_notes: string | null
           amount_crypto: number | null
           amount_usd: number
+          assigned_count: number
           created_at: string
           currency: Database["public"]["Enums"]["crypto_currency"]
           expires_at: string | null
+          filters: Json
           id: string
           order_number: string
           plan_id: string
@@ -180,9 +271,11 @@ export type Database = {
           admin_notes?: string | null
           amount_crypto?: number | null
           amount_usd: number
+          assigned_count?: number
           created_at?: string
           currency: Database["public"]["Enums"]["crypto_currency"]
           expires_at?: string | null
+          filters?: Json
           id?: string
           order_number?: string
           plan_id: string
@@ -200,9 +293,11 @@ export type Database = {
           admin_notes?: string | null
           amount_crypto?: number | null
           amount_usd?: number
+          assigned_count?: number
           created_at?: string
           currency?: Database["public"]["Enums"]["crypto_currency"]
           expires_at?: string | null
+          filters?: Json
           id?: string
           order_number?: string
           plan_id?: string
@@ -571,6 +666,7 @@ export type Database = {
     }
     Functions: {
       activate_order: { Args: { _order_id: string }; Returns: string }
+      assign_proxies_for_order: { Args: { _order_id: string }; Returns: number }
       claim_first_admin: { Args: never; Returns: boolean }
       grant_admin: { Args: { _email: string }; Returns: boolean }
       has_role: {
@@ -584,6 +680,7 @@ export type Database = {
         Args: { _order_id: string; _reason: string }
         Returns: undefined
       }
+      release_expired_assignments: { Args: never; Returns: number }
       reveal_proxy: {
         Args: {
           _inventory_id: string
