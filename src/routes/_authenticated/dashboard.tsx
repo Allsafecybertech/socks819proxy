@@ -69,25 +69,24 @@ function DashboardPage() {
           icon={ShoppingCart}
           title="No proxies yet"
           subtitle="Choose a plan below. Once your payment is approved, your dashboard will fill with the proxies you paid for."
-        >
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-6 max-w-2xl mx-auto">
-            <Link to="/plans/daily" className="glass-card rounded-xl p-4 hover:border-primary/40 transition text-left">
-              <div className="text-xs uppercase tracking-widest text-muted-foreground">Quick</div>
-              <div className="text-lg font-bold mt-1">$1.50 / 24h</div>
-              <div className="text-xs text-muted-foreground">One dedicated proxy</div>
-            </Link>
-            <Link to="/plans/daily" className="glass-card rounded-xl p-4 hover:border-primary/40 transition text-left">
-              <div className="text-xs uppercase tracking-widest text-muted-foreground">Time</div>
-              <div className="text-lg font-bold mt-1">Daily Plans</div>
-              <div className="text-xs text-muted-foreground">1, 15, 30 or 365 days</div>
-            </Link>
-            <Link to="/plans/credits" className="glass-card rounded-xl p-4 hover:border-primary/40 transition text-left">
-              <div className="text-xs uppercase tracking-widest text-muted-foreground">Credits</div>
-              <div className="text-lg font-bold mt-1">Credit Plans</div>
-              <div className="text-xs text-muted-foreground">Never expire</div>
-            </Link>
-          </div>
-        </EmptyState>
+        />
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-6 max-w-2xl mx-auto">
+          <Link to="/plans/daily" className="glass-card rounded-xl p-4 hover:border-primary/40 transition text-left">
+            <div className="text-xs uppercase tracking-widest text-muted-foreground">Quick</div>
+            <div className="text-lg font-bold mt-1">$1.50 / 24h</div>
+            <div className="text-xs text-muted-foreground">One dedicated proxy</div>
+          </Link>
+          <Link to="/plans/daily" className="glass-card rounded-xl p-4 hover:border-primary/40 transition text-left">
+            <div className="text-xs uppercase tracking-widest text-muted-foreground">Time</div>
+            <div className="text-lg font-bold mt-1">Daily Plans</div>
+            <div className="text-xs text-muted-foreground">1, 15, 30 or 365 days</div>
+          </Link>
+          <Link to="/plans/credits" className="glass-card rounded-xl p-4 hover:border-primary/40 transition text-left">
+            <div className="text-xs uppercase tracking-widest text-muted-foreground">Credits</div>
+            <div className="text-lg font-bold mt-1">Credit Plans</div>
+            <div className="text-xs text-muted-foreground">Never expire</div>
+          </Link>
+        </div>
       </>
     );
   }

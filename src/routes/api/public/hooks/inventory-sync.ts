@@ -150,7 +150,7 @@ export const Route = createFileRoute("/api/public/hooks/inventory-sync")({
                 patch.password = existing.password ?? newPassword();
                 if (!existing.username || !existing.password) credsRotated++;
               }
-              const { error: updErr } = await supabaseAdmin.from("inventory").update(patch).eq("id", existing.id);
+              const { error: updErr } = await supabaseAdmin.from("inventory").update(patch as never).eq("id", existing.id);
               if (updErr) errors.push({ ip: p.ip, port: p.port, message: updErr.message });
               else updated++;
             } else {

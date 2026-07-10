@@ -22,7 +22,7 @@ function Page() {
     if (!user) return;
     (async () => {
       // Release any expired assignments first (best effort)
-      await supabase.rpc("release_expired_assignments").catch(() => {});
+      try { await supabase.rpc("release_expired_assignments"); } catch {}
       const { data } = await supabase
         .from("inventory")
         .select("*")
@@ -55,11 +55,12 @@ function Page() {
           icon={Boxes}
           title="No proxies yet"
           subtitle="Once your payment is approved, the proxies you paid for will appear here automatically."
-        >
-          <Link to="/plans/daily" className="inline-block mt-4 px-4 py-2 rounded-lg gradient-primary text-primary-foreground text-sm font-medium">
+        />
+        <div className="text-center mt-4">
+          <Link to="/plans/daily" className="inline-block px-4 py-2 rounded-lg gradient-primary text-primary-foreground text-sm font-medium">
             Browse Plans
           </Link>
-        </EmptyState>
+        </div>
       </>
     );
   }
