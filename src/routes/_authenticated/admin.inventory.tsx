@@ -77,20 +77,25 @@ function InventoryPage() {
       <div className="glass-card rounded-2xl overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
-            <thead className="bg-muted/30 text-xs uppercase text-muted-foreground">
-              <tr>{["Country","City","ISP","Type","IP:Port","Auth","Status",""].map((h) => <th key={h} className="text-left px-4 py-3 font-medium">{h}</th>)}</tr>
+            <thead className="bg-muted/30 text-[10px] uppercase tracking-wider text-muted-foreground">
+              <tr>{["IP:PORT","COUNTRY","REGION","CITY","HOST","ONLINE","ZIPCODE","LAST VIEW","BLACKLIST","SPEED","TYPE","STATUS",""].map((h) => <th key={h} className="text-left px-3 py-2.5 font-semibold whitespace-nowrap">{h}</th>)}</tr>
             </thead>
             <tbody>
               {filtered.map((r) => (
-                <tr key={r.id} className="border-t border-border/50">
-                  <td className="px-4 py-3">{r.country}</td>
-                  <td className="px-4 py-3">{r.city ?? "—"}</td>
-                  <td className="px-4 py-3 text-muted-foreground">{r.isp ?? "—"}</td>
-                  <td className="px-4 py-3">{r.proxy_kind ?? "—"}</td>
-                  <td className="px-4 py-3 font-mono text-xs">{r.ip}:{r.port}</td>
-                  <td className="px-4 py-3 text-muted-foreground">{r.auth_type ?? "—"}</td>
-                  <td className="px-4 py-3"><Pill className={statusColor(r.status)}>{r.status}</Pill></td>
-                  <td className="px-4 py-3 text-right">
+                <tr key={r.id} className="border-t border-border/40">
+                  <td className="px-3 py-2.5 font-mono text-xs text-primary whitespace-nowrap">{r.ip}:{r.port}</td>
+                  <td className="px-3 py-2.5">{r.country ?? "—"}</td>
+                  <td className="px-3 py-2.5 text-muted-foreground">{r.region ?? "—"}</td>
+                  <td className="px-3 py-2.5">{r.city ?? "—"}</td>
+                  <td className="px-3 py-2.5 text-muted-foreground truncate max-w-[160px]">{r.host ?? r.isp ?? "—"}</td>
+                  <td className="px-3 py-2.5"><Pill className={r.is_online ? "text-success bg-success/10 border-success/30" : "text-muted-foreground border-border"}>{r.is_online ? "Online" : "Offline"}</Pill></td>
+                  <td className="px-3 py-2.5 text-xs">{r.zipcode ?? "—"}</td>
+                  <td className="px-3 py-2.5 text-xs text-muted-foreground whitespace-nowrap">{r.last_view_at ? new Date(r.last_view_at).toLocaleString() : "—"}</td>
+                  <td className="px-3 py-2.5"><Pill className={r.blacklisted ? "text-destructive bg-destructive/10 border-destructive/30" : "text-success bg-success/10 border-success/30"}>{r.blacklisted ? "Yes" : "No"}</Pill></td>
+                  <td className="px-3 py-2.5 font-mono text-xs">{r.speed ?? "—"}</td>
+                  <td className="px-3 py-2.5"><Pill className="border-primary/30 bg-primary/10 text-primary">{r.proxy_kind ?? "—"}</Pill></td>
+                  <td className="px-3 py-2.5"><Pill className={statusColor(r.status)}>{r.status}</Pill></td>
+                  <td className="px-3 py-2.5 text-right">
                     <Button size="sm" variant="ghost" onClick={() => del(r.id)}><Trash2 className="w-3.5 h-3.5 text-destructive" /></Button>
                   </td>
                 </tr>
