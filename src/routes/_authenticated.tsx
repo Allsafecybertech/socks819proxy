@@ -5,10 +5,11 @@ import { supabase } from "@/integrations/supabase/client";
 import {
   LayoutDashboard, ShoppingCart, List, Eye, CalendarDays, Coins, Infinity as InfIcon,
   Receipt, Wallet, Bell, LifeBuoy, User, Settings, Shield, LogOut, Menu,
-  Users, Boxes, ClipboardCheck, BarChart3, FileClock, Sliders,
+  Users, Boxes, ClipboardCheck, BarChart3, FileClock, Sliders, Megaphone,
 } from "lucide-react";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
+import { AnnouncementBanner } from "@/components/announcement-banner";
 
 export const Route = createFileRoute("/_authenticated")({
   component: AuthedLayout,
@@ -36,6 +37,7 @@ const ADMIN_NAV = [
   { to: "/admin/inventory", label: "Inventory", icon: Boxes },
   { to: "/admin/plans", label: "Plans", icon: Coins },
   { to: "/admin/orders", label: "Payment Verification", icon: ClipboardCheck },
+  { to: "/admin/announcements", label: "Announcements", icon: Megaphone },
   { to: "/admin/statistics", label: "Statistics", icon: BarChart3 },
   { to: "/admin/audit", label: "Audit Logs", icon: FileClock },
   { to: "/admin/settings", label: "System Settings", icon: Sliders },
@@ -109,6 +111,7 @@ function AuthedLayout() {
           <NotificationsBell />
         </header>
         <main className="flex-1 p-4 lg:p-8">
+          <AnnouncementBanner />
           <Outlet />
         </main>
       </div>

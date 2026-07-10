@@ -22,22 +22,40 @@ export function PlanGrid({ type }: { type: "time" | "credit" | "lifetime" }) {
   const [buying, setBuying] = useState<any | null>(null);
   const [currency, setCurrency] = useState<string>("USDT_TRC20");
   const [busy, setBusy] = useState(false);
+  const [countries, setCountries] = useState<string[]>([]);
+  const [kinds, setKinds] = useState<string[]>([]);
+  const [filterCountry, setFilterCountry] = useState<string>("any");
+  const [filterKind, setFilterKind] = useState<string>("any");
 
   useEffect(() => {
     supabase.from("plans").select("*").eq("plan_type", type).eq("is_active", true).order("sort_order")
       .then(({ data }) => setPlans(data ?? []));
   }, [type]);
 
+  // Preload distinct countries/kinds from available inventory so users pick
+  // filters at checkout — used to auto-assign matching proxies on approval.
+  useEffect(() => {
+    supabase.from("inventory").select("country,proxy_kind").eq("status", "available").limit(2000)
+      .then(({ data }) => {
+        setCountries(Array.from(new Set((data ?? []).map((r: any) => r.country).filter(Boolean))).sort() as string[]);
+        setKinds(Array.from(new Set((data ?? []).map((r: any) => r.proxy_kind).filter(Boolean))).sort() as string[]);
+      });
+  }, []);
+
   async function checkout() {
     if (!buying || !user) return;
     setBusy(true);
     const { data: setting } = await supabase.from("system_settings").select("value").eq("key", `wallet.${currency}`).maybeSingle();
     const wallet = (setting?.value as string) || "wallet-not-configured";
+    const filters: Record<string, string> = {};
+    if (filterCountry !== "any") filters.country = filterCountry;
+    if (filterKind !== "any") filters.proxy_kind = filterKind;
     const { data, error } = await supabase.from("orders").insert({
       user_id: user.id, plan_id: buying.id,
       currency: currency as any, wallet_address: wallet,
       amount_usd: buying.price_usd,
-    }).select().single();
+      filters,
+    } as any).select().single();
     setBusy(false);
     if (error) return toast.error(error.message);
     toast.success("Order created — complete payment");
@@ -47,7 +65,6 @@ export function PlanGrid({ type }: { type: "time" | "credit" | "lifetime" }) {
   if (type === "credit") return <CreditGrid plans={plans} onBuy={setBuying} dialog={dialog()} />;
   if (type === "time") return <TimeGrid plans={plans} onBuy={setBuying} dialog={dialog()} />;
 
-  // lifetime — simple grid
   return (
     <>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -65,6 +82,7 @@ export function PlanGrid({ type }: { type: "time" | "credit" | "lifetime" }) {
   );
 
   function dialog() {
+    const quota = buying?.plan_type === "credit" ? buying?.credits : (buying?.max_reveals ?? buying?.fair_use_limit ?? 1);
     return (
       <Dialog open={!!buying} onOpenChange={(o) => !o && setBuying(null)}>
         <DialogContent>
@@ -72,6 +90,34 @@ export function PlanGrid({ type }: { type: "time" | "credit" | "lifetime" }) {
           <div className="space-y-3">
             <div className="text-sm text-muted-foreground">Amount due</div>
             <div className="text-3xl font-bold text-gradient">{fmtUsd(buying?.price_usd)}</div>
+
+            <div className="rounded-lg bg-muted/40 border border-border/50 px-3 py-2 text-xs text-muted-foreground">
+              On payment approval, <span className="text-foreground font-semibold">{quota}</span> proxies matching your filters will be assigned to your account automatically.
+            </div>
+
+            <div className="grid grid-cols-2 gap-2">
+              <div>
+                <div className="text-xs font-medium mb-1">Country</div>
+                <Select value={filterCountry} onValueChange={setFilterCountry}>
+                  <SelectTrigger><SelectValue /></SelectTrigger>
+                  <SelectContent className="max-h-72">
+                    <SelectItem value="any">Any</SelectItem>
+                    {countries.map((c) => <SelectItem key={c} value={c}>{c}</SelectItem>)}
+                  </SelectContent>
+                </Select>
+              </div>
+              <div>
+                <div className="text-xs font-medium mb-1">Type</div>
+                <Select value={filterKind} onValueChange={setFilterKind}>
+                  <SelectTrigger><SelectValue /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="any">Any</SelectItem>
+                    {kinds.map((k) => <SelectItem key={k} value={k}>{k}</SelectItem>)}
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+
             <div>
               <div className="text-sm font-medium mb-1.5">Pay with</div>
               <Select value={currency} onValueChange={setCurrency}>
