@@ -164,12 +164,12 @@ function LandingPage() {
       <section className="max-w-7xl mx-auto px-6 pb-24">
         <div className="rounded-3xl gradient-primary p-12 text-center relative overflow-hidden">
           <h2 className="text-3xl md:text-4xl font-bold text-primary-foreground">Ready to plug in?</h2>
-          <p className="mt-3 text-primary-foreground/80 max-w-xl mx-auto">Create an account and start revealing proxies in under 60 seconds.</p>
+          <p className="mt-3 text-primary-foreground/80 max-w-xl mx-auto">Create an account, pick a paid plan, and start using proxies in minutes.</p>
           <Link
             to="/auth"
             className="mt-8 inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-background text-foreground font-semibold hover:opacity-90 transition"
           >
-            Get started free <ArrowRight className="w-4 h-4" />
+            Create account <ArrowRight className="w-4 h-4" />
           </Link>
         </div>
       </section>
