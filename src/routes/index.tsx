@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import {
   Shield, Zap, Globe2, Lock, Gauge, CheckCircle2, ArrowRight,
-  Server, Cpu, Users, Sparkles,
+  Server, Cpu, Sparkles, Menu, X, Mail, Twitter, Github, Linkedin,
 } from "lucide-react";
 
 export const Route = createFileRoute("/")({
@@ -13,6 +13,7 @@ export const Route = createFileRoute("/")({
 function LandingPage() {
   const navigate = useNavigate();
   const [checked, setChecked] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
 
   useEffect(() => {
     let mounted = true;
@@ -29,34 +30,57 @@ function LandingPage() {
   return (
     <div className="min-h-screen bg-background text-foreground overflow-x-hidden">
       {/* Nav */}
-      <header className="sticky top-0 z-40 backdrop-blur bg-background/70 border-b border-border/50">
-        <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-lg gradient-primary flex items-center justify-center glow">
+      <header className="sticky top-0 z-40 backdrop-blur-xl bg-background/80 border-b border-border/50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-4">
+          <Link to="/" className="flex items-center gap-3 min-w-0 shrink-0">
+            <div className="w-9 h-9 rounded-lg gradient-primary flex items-center justify-center glow shrink-0">
               <Shield className="w-4 h-4 text-primary-foreground" />
             </div>
-            <div>
-              <div className="text-sm font-bold tracking-wide">NOVAIN SOCKS</div>
-              <div className="text-[10px] text-muted-foreground uppercase tracking-wider">Proxy Marketplace</div>
+            <div className="min-w-0">
+              <div className="text-sm font-bold tracking-wide truncate">NOVAIN SOCKS</div>
+              <div className="text-[10px] text-muted-foreground uppercase tracking-wider truncate">Proxy Marketplace</div>
             </div>
-          </div>
-          <nav className="hidden md:flex items-center gap-8 text-sm text-muted-foreground">
+          </Link>
+          <nav className="hidden md:flex items-center gap-6 lg:gap-8 text-sm text-muted-foreground">
             <a href="#features" className="hover:text-foreground transition">Features</a>
             <a href="#plans" className="hover:text-foreground transition">Plans</a>
             <a href="#network" className="hover:text-foreground transition">Network</a>
             <a href="#faq" className="hover:text-foreground transition">FAQ</a>
           </nav>
-          <div className="flex items-center gap-2">
-            <Link to="/auth" className="px-4 py-2 text-sm text-muted-foreground hover:text-foreground transition">Sign in</Link>
+          <div className="hidden sm:flex items-center gap-2 shrink-0">
+            <Link to="/auth" className="px-3 lg:px-4 py-2 text-sm text-muted-foreground hover:text-foreground transition">Sign in</Link>
             <Link
               to="/auth"
-              className="px-4 py-2 rounded-lg text-sm font-semibold bg-primary text-primary-foreground hover:opacity-90 transition"
+              className="inline-flex items-center gap-1.5 px-3 lg:px-4 py-2 rounded-lg text-sm font-semibold bg-primary text-primary-foreground hover:opacity-90 transition"
             >
-              Get started
+              Get started <ArrowRight className="w-3.5 h-3.5" />
             </Link>
           </div>
+          <button
+            className="sm:hidden p-2 rounded-lg hover:bg-muted/50 shrink-0"
+            onClick={() => setMobileOpen((v) => !v)}
+            aria-label="Toggle menu"
+          >
+            {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+          </button>
         </div>
+        {mobileOpen && (
+          <div className="sm:hidden border-t border-border/50 bg-background/95 backdrop-blur-xl">
+            <nav className="px-4 py-4 flex flex-col gap-1 text-sm">
+              <a href="#features" onClick={() => setMobileOpen(false)} className="px-3 py-2 rounded-lg hover:bg-muted/50">Features</a>
+              <a href="#plans" onClick={() => setMobileOpen(false)} className="px-3 py-2 rounded-lg hover:bg-muted/50">Plans</a>
+              <a href="#network" onClick={() => setMobileOpen(false)} className="px-3 py-2 rounded-lg hover:bg-muted/50">Network</a>
+              <a href="#faq" onClick={() => setMobileOpen(false)} className="px-3 py-2 rounded-lg hover:bg-muted/50">FAQ</a>
+              <div className="h-px bg-border/50 my-2" />
+              <Link to="/auth" className="px-3 py-2 rounded-lg hover:bg-muted/50">Sign in</Link>
+              <Link to="/auth" className="mt-1 inline-flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-lg text-sm font-semibold bg-primary text-primary-foreground">
+                Get started <ArrowRight className="w-3.5 h-3.5" />
+              </Link>
+            </nav>
+          </div>
+        )}
       </header>
+
 
       {/* Hero */}
       <section className="relative">
@@ -174,16 +198,69 @@ function LandingPage() {
         </div>
       </section>
 
-      <footer className="border-t border-border/40">
-        <div className="max-w-7xl mx-auto px-6 py-8 flex flex-wrap items-center justify-between gap-4 text-sm text-muted-foreground">
-          <div>© {new Date().getFullYear()} NOVAIN SOCKS. All rights reserved.</div>
-          <div className="flex gap-6">
-            <Link to="/auth" className="hover:text-foreground">Sign in</Link>
-            <a href="#features" className="hover:text-foreground">Features</a>
-            <a href="#plans" className="hover:text-foreground">Plans</a>
+      <footer className="border-t border-border/40 bg-card/40">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-14">
+          <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-5">
+            <div className="lg:col-span-2">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-lg gradient-primary flex items-center justify-center glow">
+                  <Shield className="w-5 h-5 text-primary-foreground" />
+                </div>
+                <div>
+                  <div className="text-base font-bold tracking-wide">NOVAIN SOCKS</div>
+                  <div className="text-[10px] text-muted-foreground uppercase tracking-wider">Enterprise Proxy Marketplace</div>
+                </div>
+              </div>
+              <p className="mt-5 text-sm text-muted-foreground max-w-sm">
+                Clean, high-uptime SOCKS5 endpoints for scrapers, automation teams, and QA — with
+                per-reveal privacy, credit and time plans, and a live inventory engine.
+              </p>
+              <div className="mt-5 flex items-center gap-2">
+                <a href="mailto:support@socks819proxy.com" aria-label="Email" className="w-9 h-9 rounded-lg border border-border/60 flex items-center justify-center hover:border-primary/40 hover:text-primary transition">
+                  <Mail className="w-4 h-4" />
+                </a>
+                <a href="#" aria-label="Twitter" className="w-9 h-9 rounded-lg border border-border/60 flex items-center justify-center hover:border-primary/40 hover:text-primary transition">
+                  <Twitter className="w-4 h-4" />
+                </a>
+                <a href="#" aria-label="GitHub" className="w-9 h-9 rounded-lg border border-border/60 flex items-center justify-center hover:border-primary/40 hover:text-primary transition">
+                  <Github className="w-4 h-4" />
+                </a>
+                <a href="#" aria-label="LinkedIn" className="w-9 h-9 rounded-lg border border-border/60 flex items-center justify-center hover:border-primary/40 hover:text-primary transition">
+                  <Linkedin className="w-4 h-4" />
+                </a>
+              </div>
+            </div>
+
+            <FooterCol title="Product" links={[
+              { label: "Features", href: "#features" },
+              { label: "Plans", href: "#plans" },
+              { label: "Network", href: "#network" },
+              { label: "FAQ", href: "#faq" },
+            ]} />
+            <FooterCol title="Company" links={[
+              { label: "About", href: "#" },
+              { label: "Contact", href: "mailto:support@socks819proxy.com" },
+              { label: "Status", href: "#" },
+              { label: "Blog", href: "#" },
+            ]} />
+            <FooterCol title="Legal" links={[
+              { label: "Terms of Service", href: "#" },
+              { label: "Privacy Policy", href: "#" },
+              { label: "Acceptable Use", href: "#" },
+              { label: "Refunds", href: "#" },
+            ]} />
+          </div>
+
+          <div className="mt-12 pt-6 border-t border-border/40 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 text-xs text-muted-foreground">
+            <div>© {new Date().getFullYear()} NOVAIN SOCKS. All rights reserved.</div>
+            <div className="flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-success animate-pulse" />
+              <span>All systems operational</span>
+            </div>
           </div>
         </div>
       </footer>
+
 
       {!checked && <div className="hidden">loading</div>}
     </div>
@@ -247,5 +324,20 @@ function FAQ({ q, a }: { q: string; a: string }) {
       </summary>
       <p className="mt-3 text-sm text-muted-foreground">{a}</p>
     </details>
+  );
+}
+
+function FooterCol({ title, links }: { title: string; links: { label: string; href: string }[] }) {
+  return (
+    <div>
+      <div className="text-xs uppercase tracking-widest text-foreground font-semibold">{title}</div>
+      <ul className="mt-4 space-y-2.5 text-sm">
+        {links.map((l) => (
+          <li key={l.label}>
+            <a href={l.href} className="text-muted-foreground hover:text-foreground transition">{l.label}</a>
+          </li>
+        ))}
+      </ul>
+    </div>
   );
 }
