@@ -36,7 +36,7 @@ import { Route as AuthenticatedAdminOrdersRouteImport } from './routes/_authenti
 import { Route as AuthenticatedAdminInventoryRouteImport } from './routes/_authenticated/admin.inventory'
 import { Route as AuthenticatedAdminAuditRouteImport } from './routes/_authenticated/admin.audit'
 import { Route as AuthenticatedAdminAnnouncementsRouteImport } from './routes/_authenticated/admin.announcements'
-import { Route as ApiPublicHooksInventorySyncRouteImport } from './routes/api/public/hooks/inventory-sync'
+import { Route as ApiPublicHooksProxySyncRouteImport } from './routes/api/public/hooks/proxy-sync'
 
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
@@ -181,12 +181,11 @@ const AuthenticatedAdminAnnouncementsRoute =
     path: '/announcements',
     getParentRoute: () => AuthenticatedAdminRoute,
   } as any)
-const ApiPublicHooksInventorySyncRoute =
-  ApiPublicHooksInventorySyncRouteImport.update({
-    id: '/api/public/hooks/inventory-sync',
-    path: '/api/public/hooks/inventory-sync',
-    getParentRoute: () => rootRouteImport,
-  } as any)
+const ApiPublicHooksProxySyncRoute = ApiPublicHooksProxySyncRouteImport.update({
+  id: '/api/public/hooks/proxy-sync',
+  path: '/api/public/hooks/proxy-sync',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -215,7 +214,7 @@ export interface FileRoutesByFullPath {
   '/plans/lifetime': typeof AuthenticatedPlansLifetimeRoute
   '/admin/': typeof AuthenticatedAdminIndexRoute
   '/orders/': typeof AuthenticatedOrdersIndexRoute
-  '/api/public/hooks/inventory-sync': typeof ApiPublicHooksInventorySyncRoute
+  '/api/public/hooks/proxy-sync': typeof ApiPublicHooksProxySyncRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -243,7 +242,7 @@ export interface FileRoutesByTo {
   '/plans/lifetime': typeof AuthenticatedPlansLifetimeRoute
   '/admin': typeof AuthenticatedAdminIndexRoute
   '/orders': typeof AuthenticatedOrdersIndexRoute
-  '/api/public/hooks/inventory-sync': typeof ApiPublicHooksInventorySyncRoute
+  '/api/public/hooks/proxy-sync': typeof ApiPublicHooksProxySyncRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -274,7 +273,7 @@ export interface FileRoutesById {
   '/_authenticated/plans/lifetime': typeof AuthenticatedPlansLifetimeRoute
   '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
   '/_authenticated/orders/': typeof AuthenticatedOrdersIndexRoute
-  '/api/public/hooks/inventory-sync': typeof ApiPublicHooksInventorySyncRoute
+  '/api/public/hooks/proxy-sync': typeof ApiPublicHooksProxySyncRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -305,7 +304,7 @@ export interface FileRouteTypes {
     | '/plans/lifetime'
     | '/admin/'
     | '/orders/'
-    | '/api/public/hooks/inventory-sync'
+    | '/api/public/hooks/proxy-sync'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -333,7 +332,7 @@ export interface FileRouteTypes {
     | '/plans/lifetime'
     | '/admin'
     | '/orders'
-    | '/api/public/hooks/inventory-sync'
+    | '/api/public/hooks/proxy-sync'
   id:
     | '__root__'
     | '/'
@@ -363,14 +362,14 @@ export interface FileRouteTypes {
     | '/_authenticated/plans/lifetime'
     | '/_authenticated/admin/'
     | '/_authenticated/orders/'
-    | '/api/public/hooks/inventory-sync'
+    | '/api/public/hooks/proxy-sync'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
   AuthRoute: typeof AuthRoute
-  ApiPublicHooksInventorySyncRoute: typeof ApiPublicHooksInventorySyncRoute
+  ApiPublicHooksProxySyncRoute: typeof ApiPublicHooksProxySyncRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -564,11 +563,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminAnnouncementsRouteImport
       parentRoute: typeof AuthenticatedAdminRoute
     }
-    '/api/public/hooks/inventory-sync': {
-      id: '/api/public/hooks/inventory-sync'
-      path: '/api/public/hooks/inventory-sync'
-      fullPath: '/api/public/hooks/inventory-sync'
-      preLoaderRoute: typeof ApiPublicHooksInventorySyncRouteImport
+    '/api/public/hooks/proxy-sync': {
+      id: '/api/public/hooks/proxy-sync'
+      path: '/api/public/hooks/proxy-sync'
+      fullPath: '/api/public/hooks/proxy-sync'
+      preLoaderRoute: typeof ApiPublicHooksProxySyncRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
@@ -645,7 +644,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRoute: AuthenticatedRouteWithChildren,
   AuthRoute: AuthRoute,
-  ApiPublicHooksInventorySyncRoute: ApiPublicHooksInventorySyncRoute,
+  ApiPublicHooksProxySyncRoute: ApiPublicHooksProxySyncRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
