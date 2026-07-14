@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import {
   Shield, Zap, Globe2, Lock, Gauge, CheckCircle2, ArrowRight,
-  Server, Cpu, Users, Sparkles,
+  Server, Cpu, Sparkles, Menu, X, Mail, Twitter, Github, Linkedin,
 } from "lucide-react";
 
 export const Route = createFileRoute("/")({
