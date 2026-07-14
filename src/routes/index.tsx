@@ -81,7 +81,7 @@ function LandingPage() {
               to="/auth"
               className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-primary text-primary-foreground font-semibold hover:opacity-90 transition"
             >
-              Start free <ArrowRight className="w-4 h-4" />
+              Create account <ArrowRight className="w-4 h-4" />
             </Link>
             <a
               href="#plans"
