@@ -30,34 +30,57 @@ function LandingPage() {
   return (
     <div className="min-h-screen bg-background text-foreground overflow-x-hidden">
       {/* Nav */}
-      <header className="sticky top-0 z-40 backdrop-blur bg-background/70 border-b border-border/50">
-        <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-lg gradient-primary flex items-center justify-center glow">
+      <header className="sticky top-0 z-40 backdrop-blur-xl bg-background/80 border-b border-border/50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-4">
+          <Link to="/" className="flex items-center gap-3 min-w-0 shrink-0">
+            <div className="w-9 h-9 rounded-lg gradient-primary flex items-center justify-center glow shrink-0">
               <Shield className="w-4 h-4 text-primary-foreground" />
             </div>
-            <div>
-              <div className="text-sm font-bold tracking-wide">NOVAIN SOCKS</div>
-              <div className="text-[10px] text-muted-foreground uppercase tracking-wider">Proxy Marketplace</div>
+            <div className="min-w-0">
+              <div className="text-sm font-bold tracking-wide truncate">NOVAIN SOCKS</div>
+              <div className="text-[10px] text-muted-foreground uppercase tracking-wider truncate">Proxy Marketplace</div>
             </div>
-          </div>
-          <nav className="hidden md:flex items-center gap-8 text-sm text-muted-foreground">
+          </Link>
+          <nav className="hidden md:flex items-center gap-6 lg:gap-8 text-sm text-muted-foreground">
             <a href="#features" className="hover:text-foreground transition">Features</a>
             <a href="#plans" className="hover:text-foreground transition">Plans</a>
             <a href="#network" className="hover:text-foreground transition">Network</a>
             <a href="#faq" className="hover:text-foreground transition">FAQ</a>
           </nav>
-          <div className="flex items-center gap-2">
-            <Link to="/auth" className="px-4 py-2 text-sm text-muted-foreground hover:text-foreground transition">Sign in</Link>
+          <div className="hidden sm:flex items-center gap-2 shrink-0">
+            <Link to="/auth" className="px-3 lg:px-4 py-2 text-sm text-muted-foreground hover:text-foreground transition">Sign in</Link>
             <Link
               to="/auth"
-              className="px-4 py-2 rounded-lg text-sm font-semibold bg-primary text-primary-foreground hover:opacity-90 transition"
+              className="inline-flex items-center gap-1.5 px-3 lg:px-4 py-2 rounded-lg text-sm font-semibold bg-primary text-primary-foreground hover:opacity-90 transition"
             >
-              Get started
+              Get started <ArrowRight className="w-3.5 h-3.5" />
             </Link>
           </div>
+          <button
+            className="sm:hidden p-2 rounded-lg hover:bg-muted/50 shrink-0"
+            onClick={() => setMobileOpen((v) => !v)}
+            aria-label="Toggle menu"
+          >
+            {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+          </button>
         </div>
+        {mobileOpen && (
+          <div className="sm:hidden border-t border-border/50 bg-background/95 backdrop-blur-xl">
+            <nav className="px-4 py-4 flex flex-col gap-1 text-sm">
+              <a href="#features" onClick={() => setMobileOpen(false)} className="px-3 py-2 rounded-lg hover:bg-muted/50">Features</a>
+              <a href="#plans" onClick={() => setMobileOpen(false)} className="px-3 py-2 rounded-lg hover:bg-muted/50">Plans</a>
+              <a href="#network" onClick={() => setMobileOpen(false)} className="px-3 py-2 rounded-lg hover:bg-muted/50">Network</a>
+              <a href="#faq" onClick={() => setMobileOpen(false)} className="px-3 py-2 rounded-lg hover:bg-muted/50">FAQ</a>
+              <div className="h-px bg-border/50 my-2" />
+              <Link to="/auth" className="px-3 py-2 rounded-lg hover:bg-muted/50">Sign in</Link>
+              <Link to="/auth" className="mt-1 inline-flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-lg text-sm font-semibold bg-primary text-primary-foreground">
+                Get started <ArrowRight className="w-3.5 h-3.5" />
+              </Link>
+            </nav>
+          </div>
+        )}
       </header>
+
 
       {/* Hero */}
       <section className="relative">
