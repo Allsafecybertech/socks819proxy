@@ -125,8 +125,8 @@ function LandingPage() {
           subtitle="Mix and match time plans, credits, and lifetime access."
         />
         <div className="mt-12 grid md:grid-cols-3 gap-6">
-          <PlanCard name="Daily" tag="Time-based" price="From $9" points={["Unlimited within cap","Fair-use protected","Reset every 24h"]} />
-          <PlanCard name="Credits" tag="Pay-as-you-go" featured price="From $19" points={["1 credit = 1 reveal","Never expires","Best value at scale"]} />
+          <PlanCard name="Daily" tag="24h · 1 proxy" price="$1.50" points={["Single dedicated proxy","Full 24-hour access","Auto-assigned on approval"]} />
+          <PlanCard name="Credits" tag="Pay-as-you-go" featured price="From $19" points={["1 credit = 1 proxy","Never expires","Best value at scale"]} />
           <PlanCard name="Lifetime" tag="One-time" price="From $199" points={["Perpetual access","Priority queue","Reseller rates"]} />
         </div>
         <div className="mt-8 text-center">
